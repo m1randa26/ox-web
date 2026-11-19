@@ -1,0 +1,114 @@
+---
+import { Image } from "astro:assets";
+import Menu from "@lucide/astro/icons/menu";
+import X from "@lucide/astro/icons/x";
+import logo from "../assets/logo-ox.png";
+import { waLink } from "../lib/whatsapp";
+
+const links = [
+  { href: "#smart-living", label: "Smart Living" },
+  { href: "#hogar", label: "Tu Nuevo Hogar" },
+  { href: "#ubicacion", label: "Ubicación" },
+  { href: "#ostech", label: "OSTECH Desarrolladora" },
+];
+const wa = waLink();
+---
+
+<header
+  class="site-header fixed inset-x-0 top-0 z-40 transition-all duration-300"
+  data-scrolled="false"
+  data-menu-open="false"
+>
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 sm:px-8">
+    <a href="#inicio" aria-label="Inicio — OX Residencial" class="shrink-0">
+      <Image
+        src={logo}
+        alt="OX Tres Residencias Privadas — Dzityá, Mérida"
+        width={210}
+        densities={[1, 2]}
+        loading="eager"
+        fetchpriority="high"
+        class="h-28 w-auto object-contain sm:h-32"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex" aria-label="Principal">
+      {
+        links.map((l) => (
+          <a href={l.href} class="nav-link whitespace-nowrap text-sm font-medium transition-colors">
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={wa}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden min-h-[44px] items-center rounded-full bg-verde px-5 text-sm font-medium text-marfil transition-colors hover:bg-verde-700 sm:inline-flex"
+        >Conoce OX</a
+      >
+      <button
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="menu-toggle flex h-11 w-11 items-center justify-center rounded-full transition-colors lg:hidden"
+      >
+        <Menu size={24} class="icon-open" aria-hidden="true" />
+        <X size={24} class="icon-close" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+
+  <nav
+    id="mobile-menu"
+    hidden
+    class="border-t border-greige/30 bg-marfil/95 backdrop-blur-md lg:hidden"
+    aria-label="Menú móvil"
+  >
+    <div class="mx-auto flex max-w-7xl flex-col px-5 py-3 sm:px-8">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            data-close-menu
+            class="border-b border-greige/20 py-3 text-base font-medium text-carbon last:border-0"
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <a
+        href={wa}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-3 inline-flex min-h-[48px] items-center justify-center rounded-full bg-verde px-5 text-sm font-medium text-marfil"
+        >Agenda una visita</a
+      >
+    </div>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>(".site-header")!;
+  const toggle = header.querySelector<HTMLButtonElement>(".menu-toggle")!;
+  const menu = header.querySelector<HTMLElement>("#mobile-menu")!;
+
+  const onScroll = () => {
+    header.dataset.scrolled = String(window.scrollY > 24);
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    header.dataset.menuOpen = String(open);
+    menu.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+  };
+  toggle.addEventListener("click", () => setOpen(menu.hidden));
+  menu.querySelectorAll("[data-close-menu]").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+</script>

@@ -1,0 +1,91 @@
+---
+import { Image } from "astro:assets";
+import SectionHeading from "./SectionHeading.astro";
+import Reveal from "./Reveal.astro";
+import Button from "./Button.astro";
+import Eyebrow from "./Eyebrow.astro";
+import Gallery from "./Gallery.astro";
+import FloorPlan from "./FloorPlan.astro";
+import { waLink } from "../lib/whatsapp";
+
+import Ruler from "@lucide/astro/icons/ruler";
+import Maximize from "@lucide/astro/icons/maximize";
+import BedDouble from "@lucide/astro/icons/bed-double";
+import Briefcase from "@lucide/astro/icons/briefcase";
+import WavesHorizontal from "@lucide/astro/icons/waves-horizontal";
+import Car from "@lucide/astro/icons/car";
+import Check from "@lucide/astro/icons/check";
+
+const specs = [
+  { icon: Ruler, value: "281.40 m²", label: "Construcción" },
+  { icon: Maximize, value: "8 × 30 m", label: "Terreno" },
+  { icon: BedDouble, value: "3 recámaras", label: "Amplias y confortables" },
+  { icon: Briefcase, value: "Home office", label: "Espacio para trabajar" },
+  { icon: WavesHorizontal, value: "Alberca", label: "Privada" },
+  { icon: Car, value: "2 autos", label: "Cochera techada" },
+];
+const amenities = ["Cocina integral", "Jardín", "Paneles solares", "Diseño contemporáneo", "Sistema Smart Home"];
+---
+
+<section id="hogar" class="bg-marfil py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <SectionHeading
+      eyebrow="Conoce tu nuevo hogar"
+      title="Espacios diseñados para la vida que quieres construir."
+      intro="Cada detalle de OX fue concebido para responder a las necesidades de la vida actual: compartir en familia, trabajar desde casa, descansar, disfrutar y crecer."
+    />
+
+    <Reveal class="mt-14">
+      <Gallery />
+    </Reveal>
+
+    <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-10">
+      <Reveal class="lg:col-span-2">
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          {
+            specs.map(({ icon: Icon, value, label }) => (
+              <div class="rounded-2xl border border-greige/40 bg-white/40 p-5">
+                <Icon size={22} stroke-width={1.6} class="text-oro" aria-hidden="true" />
+                <p class="mt-3 font-display text-lg font-semibold leading-tight text-grafito">{value}</p>
+                <p class="mt-0.5 text-xs leading-snug text-carbon/65">{label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.15} class="flex flex-col">
+        <ul class="grid grid-cols-1 gap-3">
+          {
+            amenities.map((a) => (
+              <li class="flex items-center gap-2.5 text-sm text-carbon/85">
+                <Check size={17} class="shrink-0 text-verde" aria-hidden="true" />
+                {a}
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-auto pt-6">
+          <Button href={waLink()} class="w-full sm:w-auto lg:w-full">Agenda una visita y conoce OX</Button>
+        </div>
+      </Reveal>
+    </div>
+
+    <Reveal class="mt-20">
+      <div class="mx-auto max-w-2xl text-center">
+        <Eyebrow size="xs" center>Distribución</Eyebrow>
+        <h3 class="mt-4 font-display text-2xl font-semibold leading-tight tracking-display text-grafito sm:text-3xl">
+          Conoce la distribución de tu residencia.
+        </h3>
+        <p class="mt-4 text-base leading-relaxed text-carbon/75">
+          Dos niveles pensados para la vida actual: convivencia y servicios en planta baja, descanso y privacidad en planta
+          alta.
+        </p>
+      </div>
+      <FloorPlan />
+      <p class="mt-4 text-center text-sm text-carbon/60">
+        Planta baja y planta alta · 281.40 m² de construcción · Toca para ampliar y hacer zoom
+      </p>
+    </Reveal>
+  </div>
+</section>

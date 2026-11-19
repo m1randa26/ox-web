@@ -1,0 +1,80 @@
+---
+import { Image } from "astro:assets";
+import Reveal from "./Reveal.astro";
+import Eyebrow from "./Eyebrow.astro";
+import Button from "./Button.astro";
+import { waLink, OSTECH_MESSAGE } from "../lib/whatsapp";
+import lateral1 from "../assets/renders/lateral-1.webp";
+
+import ShieldCheck from "@lucide/astro/icons/shield-check";
+import Lightbulb from "@lucide/astro/icons/lightbulb";
+import BuildingComplex from "@lucide/astro/icons/building-complex";
+import HeartHandshake from "@lucide/astro/icons/heart-handshake";
+
+const values = [
+  { icon: ShieldCheck, label: "Calidad constructiva" },
+  { icon: Lightbulb, label: "Innovación integrada" },
+  { icon: BuildingComplex, label: "Visión de largo plazo" },
+  { icon: HeartHandshake, label: "Compromiso con cada familia" },
+];
+---
+
+<section id="ostech" class="bg-verde py-24 text-marfil sm:py-32">
+  <div class="mx-auto max-w-7xl px-5 sm:px-8">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
+      <Reveal>
+        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl">
+          <Image
+            src={lateral1}
+            alt="Detalle arquitectónico de un desarrollo OSTECH"
+            widths={[384, 640, 828, 1080, 1200, 1920, 2000]}
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.1}>
+        <Eyebrow size="xs" tone="oro-300">OSTECH Desarrolladora</Eyebrow>
+        <h2 class="mt-4 font-display text-3xl font-semibold leading-tight tracking-display sm:text-4xl">
+          Detrás de un gran hogar, hay un desarrollador en quien puedes confiar.
+        </h2>
+        <p class="mt-5 text-base leading-relaxed text-marfil/75">
+          Cada proyecto que desarrollamos refleja una visión clara: crear espacios que combinen diseño, innovación,
+          tecnología y calidad constructiva para responder a las nuevas formas de vivir.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-marfil/75">
+          En <strong class="font-semibold text-marfil/90">OSTECH Desarrolladora</strong> entendemos que adquirir una
+          residencia es una de las decisiones patrimoniales más importantes para una familia. Por ello, cada desarrollo
+          está respaldado por procesos responsables, seguridad jurídica, garantía postventa y un compromiso permanente con
+          quienes depositan su confianza en nosotros.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-marfil/75">
+          Creemos que un buen desarrollo no termina con la entrega de una casa; comienza con la tranquilidad de saber que
+          detrás de tu inversión existe una empresa sólida, con experiencia y visión de largo plazo.
+        </p>
+        <p class="mt-4 text-base font-semibold leading-relaxed text-marfil/90">
+          En OX construimos más que residencias; creamos espacios pensados para perdurar, generar valor y acompañar los
+          proyectos de vida de quienes deciden llamarlos hogar.
+        </p>
+
+        <ul class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {
+            values.map(({ icon: Icon, label }) => (
+              <li class="flex items-center gap-3">
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-oro/30 bg-oro/10 text-oro-300">
+                  <Icon size={20} stroke-width={1.6} aria-hidden="true" />
+                </span>
+                <span class="text-sm font-medium text-marfil/90">{label}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <Button href={waLink({ context: OSTECH_MESSAGE })} variant="light" class="mt-9">
+          Conoce el respaldo de OSTECH Desarrolladora
+        </Button>
+      </Reveal>
+    </div>
+  </div>
+</section>

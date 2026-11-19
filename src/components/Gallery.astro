@@ -1,0 +1,218 @@
+---
+import { Image, getImage } from "astro:assets";
+import ChevronLeft from "@lucide/astro/icons/chevron-left";
+import ChevronRight from "@lucide/astro/icons/chevron-right";
+import Eye from "@lucide/astro/icons/eye";
+import X from "@lucide/astro/icons/x";
+
+import fachadaPrincipal from "../assets/renders/fachada-principal.webp";
+import cocina from "../assets/renders/cocina.webp";
+import recamaraPrincipal from "../assets/renders/recamara-principal.webp";
+import banoPrincipal from "../assets/renders/bano-principal.webp";
+import lateral1 from "../assets/renders/lateral-1.webp";
+import fachadaPosterior from "../assets/renders/fachada-posterior.webp";
+import recamaraPb from "../assets/renders/recamara-pb.webp";
+import banoPb from "../assets/renders/bano-pb.webp";
+import lateral2 from "../assets/renders/lateral-2.webp";
+
+const slides = [
+  { img: fachadaPrincipal, alt: "Fachada principal del conjunto residencial OX" },
+  { img: cocina, alt: "Cocina con isla y comedor integrados" },
+  { img: recamaraPrincipal, alt: "Recámara principal con acceso a terraza" },
+  { img: banoPrincipal, alt: "Baño principal con vestidor" },
+  { img: lateral1, alt: "Vista lateral de la residencia OX" },
+  { img: fachadaPosterior, alt: "Fachada posterior con área de alberca" },
+  { img: recamaraPb, alt: "Recámara en planta baja" },
+  { img: banoPb, alt: "Baño en planta baja" },
+  { img: lateral2, alt: "Vista lateral alterna de la residencia OX" },
+];
+
+// Versión grande para el visor (object-contain, máx. 2000px)
+const large = await Promise.all(
+  slides.map((s) => getImage({ src: s.img, width: Math.min(s.img.width, 2000), format: "webp" })),
+);
+const widthsFor = (w: number) => [640, 828, 1080, 1200, 1920].filter((x) => x < w).concat(w);
+---
+
+<div
+  class="ox-carousel relative overflow-hidden rounded-2xl"
+  style="aspect-ratio:16/9"
+  data-interval="4500"
+  aria-roledescription="carrusel"
+>
+  {
+    slides.map((s, i) => (
+      <div class:list={["slide absolute inset-0", i === 0 && "is-active"]} aria-hidden={i === 0 ? "false" : "true"}>
+        <button
+          type="button"
+          data-open={i}
+          aria-label={`Ampliar imagen: ${s.alt}`}
+          tabindex={i === 0 ? 0 : -1}
+          class="group absolute inset-0 h-full w-full"
+        >
+          <Image
+            src={s.img}
+            alt={s.alt}
+            widths={widthsFor(s.img.width)}
+            sizes="(max-width: 1280px) 100vw, 1200px"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+          <span class="pointer-events-none absolute inset-0 flex items-center justify-center bg-grafito/0 opacity-0 transition-all duration-300 group-hover:bg-grafito/25 group-hover:opacity-100">
+            <span class="flex items-center gap-2 rounded-full bg-marfil/95 px-5 py-2.5 text-sm font-medium text-grafito shadow-lg">
+              <Eye size={18} aria-hidden="true" /> Ver
+            </span>
+          </span>
+        </button>
+      </div>
+    ))
+  }
+
+  <button
+    type="button"
+    data-prev
+    aria-label="Imagen anterior"
+    class="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-marfil/80 text-grafito shadow-sm backdrop-blur transition-colors hover:bg-marfil"
+  >
+    <ChevronLeft size={22} aria-hidden="true" />
+  </button>
+  <button
+    type="button"
+    data-next
+    aria-label="Imagen siguiente"
+    class="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-marfil/80 text-grafito shadow-sm backdrop-blur transition-colors hover:bg-marfil"
+  >
+    <ChevronRight size={22} aria-hidden="true" />
+  </button>
+
+  <div class="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+    {
+      slides.map((_, i) => (
+        <button
+          type="button"
+          data-go={i}
+          aria-label={`Ir a imagen ${i + 1}`}
+          aria-current={i === 0 ? "true" : "false"}
+          class="dot h-2 rounded-full transition-all duration-300"
+        />
+      ))
+    }
+  </div>
+</div>
+
+<dialog
+  class="ox-dialog ox-gallery-dialog fixed inset-0 z-[60] items-center justify-center p-4 open:flex"
+  aria-label="Galería de imágenes"
+  data-slides={JSON.stringify(slides.map((s, i) => ({ src: large[i].src, alt: s.alt })))}
+>
+  <button
+    type="button"
+    data-close
+    aria-label="Cerrar galería"
+    class="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-marfil/10 text-marfil hover:bg-marfil/20"
+  >
+    <X size={24} aria-hidden="true" />
+  </button>
+  <button
+    type="button"
+    data-prev
+    aria-label="Imagen anterior"
+    class="absolute left-3 flex h-12 w-12 items-center justify-center rounded-full bg-marfil/10 text-marfil hover:bg-marfil/20 sm:left-6"
+  >
+    <ChevronLeft size={26} aria-hidden="true" />
+  </button>
+  <div class="relative h-[78vh] w-full max-w-5xl">
+    <img data-img alt="" class="absolute inset-0 h-full w-full object-contain" decoding="async" />
+    <p data-caption class="absolute -bottom-9 left-0 right-0 text-center text-sm text-marfil/70"></p>
+  </div>
+  <button
+    type="button"
+    data-next
+    aria-label="Imagen siguiente"
+    class="absolute right-3 flex h-12 w-12 items-center justify-center rounded-full bg-marfil/10 text-marfil hover:bg-marfil/20 sm:right-6"
+  >
+    <ChevronRight size={26} aria-hidden="true" />
+  </button>
+</dialog>
+
+<script>
+  import { lockScroll, unlockScroll } from "../scripts/scroll-lock";
+
+  const root = document.querySelector<HTMLElement>(".ox-carousel")!;
+  const slides = [...root.querySelectorAll<HTMLElement>(".slide")];
+  const dots = [...root.querySelectorAll<HTMLButtonElement>("[data-go]")];
+  const total = slides.length;
+  const interval = Number(root.dataset.interval) || 4500;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  let current = 0;
+  let timer: number | undefined;
+  let hovering = false;
+
+  const show = (i: number) => {
+    current = (i + total) % total;
+    slides.forEach((s, k) => {
+      const active = k === current;
+      s.classList.toggle("is-active", active);
+      s.setAttribute("aria-hidden", String(!active));
+      s.querySelector("button")!.tabIndex = active ? 0 : -1;
+    });
+    dots.forEach((d, k) => d.setAttribute("aria-current", String(k === current)));
+  };
+
+  const start = () => {
+    stop();
+    if (!hovering && !reduced && total > 1) timer = window.setInterval(() => show(current + 1), interval);
+  };
+  const stop = () => {
+    if (timer) window.clearInterval(timer);
+    timer = undefined;
+  };
+
+  root.querySelector("[data-prev]")!.addEventListener("click", () => (show(current - 1), start()));
+  root.querySelector("[data-next]")!.addEventListener("click", () => (show(current + 1), start()));
+  dots.forEach((d) => d.addEventListener("click", () => (show(Number(d.dataset.go)), start())));
+  root.addEventListener("mouseenter", () => ((hovering = true), stop()));
+  root.addEventListener("mouseleave", () => ((hovering = false), start()));
+  start();
+
+  // ----- Visor (lightbox) -----
+  const dialog = document.querySelector<HTMLDialogElement>(".ox-gallery-dialog")!;
+  const data: { src: string; alt: string }[] = JSON.parse(dialog.dataset.slides!);
+  const img = dialog.querySelector<HTMLImageElement>("[data-img]")!;
+  const caption = dialog.querySelector<HTMLElement>("[data-caption]")!;
+  let lbIndex = 0;
+
+  const render = () => {
+    img.src = data[lbIndex].src;
+    img.alt = data[lbIndex].alt;
+    caption.textContent = data[lbIndex].alt;
+  };
+  const step = (d: number) => {
+    lbIndex = (lbIndex + d + data.length) % data.length;
+    render();
+  };
+
+  root.querySelectorAll<HTMLButtonElement>("[data-open]").forEach((b) =>
+    b.addEventListener("click", () => {
+      lbIndex = Number(b.dataset.open);
+      render();
+      dialog.showModal();
+      lockScroll();
+      stop();
+    }),
+  );
+  dialog.addEventListener("close", () => {
+    unlockScroll();
+    start();
+  });
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.querySelector("[data-close]")!.addEventListener("click", () => dialog.close());
+  dialog.querySelector("[data-prev]")!.addEventListener("click", () => step(-1));
+  dialog.querySelector("[data-next]")!.addEventListener("click", () => step(1));
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") step(-1);
+    if (e.key === "ArrowRight") step(1);
+  });
+</script>

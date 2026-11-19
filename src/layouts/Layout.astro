@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+import ogImage from "../assets/renders/fachada-principal.webp";
+import { getImage } from "astro:assets";
+
+const title = "OX Residencial | Smart Living en Dzityá, Mérida";
+const description =
+  "Residencias boutique en Dzityá, Mérida que integran tecnología, seguridad y eficiencia. Donde la tecnología se convierte en calidad de vida. Agenda tu visita.";
+const ogDescription =
+  "Residencias boutique que integran tecnología, seguridad y eficiencia. Una nueva forma de vivir en Mérida.";
+const keywords =
+  "OX Residencial,casas inteligentes Mérida,smart home Dzityá,residencias boutique Mérida,OSTECH Desarrolladora,casas en venta Mérida";
+
+const og = await getImage({ src: ogImage, format: "webp", width: 2000 });
+const ogUrl = new URL(og.src, Astro.site).href;
+const ogW = String(og.attributes.width ?? ogImage.width);
+const ogH = String(og.attributes.height ?? ogImage.height);
+---
+
+<!doctype html>
+<html lang="es" class="no-js h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.remove("no-js");</script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:site_name" content="OX Residencial" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content={ogW} />
+    <meta property="og:image:height" content={ogH} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogUrl} />
+    <meta name="twitter:image:width" content={ogW} />
+    <meta name="twitter:image:height" content={ogH} />
+    <link rel="icon" href="/favicon.ico" sizes="256x256" type="image/x-icon" />
+  </head>
+  <body class="min-h-full antialiased">
+    <slot />
+  </body>
+</html>

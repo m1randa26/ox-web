@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Fuentes (self-hosted vía Fontsource, mismos pesos que el original)
+   --------------------------------------------------------------- */
+@import "@fontsource/outfit/300.css";
+@import "@fontsource/outfit/400.css";
+@import "@fontsource/outfit/500.css";
+@import "@fontsource/outfit/600.css";
+@import "@fontsource/outfit/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+/* Fallbacks métricos idénticos a los que genera next/font en el original */
+@font-face {
+  font-family: "Outfit Fallback";
+  src: local(Arial);
+  ascent-override: 100.18%;
+  descent-override: 26.05%;
+  line-gap-override: 0%;
+  size-adjust: 99.82%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  src: local(Arial);
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+  size-adjust: 107.12%;
+}
+
+/* ---------------------------------------------------------------
+   Tokens de marca
+   --------------------------------------------------------------- */
+:root {
+  --font-outfit: "Outfit", "Outfit Fallback";
+  --font-inter: "Inter", "Inter Fallback";
+
+  --marfil: #f6f3ee;
+  --greige: #b7b1a5;
+  --chukum: #c7b299;
+  --carbon: #2e2e2e;
+  --grafito: #1c1c1c;
+  --verde: #1e3a34;
+  --verde-700: #16302b;
+  --oro: #b8915a;
+  --oro-300: #d6b483;
+
+  --ease-ox: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-background: var(--marfil);
+  --color-marfil: var(--marfil);
+  --color-greige: var(--greige);
+  --color-chukum: var(--chukum);
+  --color-carbon: var(--carbon);
+  --color-grafito: var(--grafito);
+  --color-verde: var(--verde);
+  --color-verde-700: var(--verde-700);
+  --color-oro: var(--oro);
+  --color-oro-300: var(--oro-300);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-outfit);
+  --default-font-family: var(--font-inter);
+
+  /* Radios personalizados del original */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 1.5rem;
+}
+
+/* ---------------------------------------------------------------
+   Reglas globales SIN capa (igual que el original: ganan a las utilidades)
+   ⚠️ Todos los bordes se ven greige al 45 %, aunque la clase diga otro color.
+   --------------------------------------------------------------- */
+* {
+  border-color: var(--greige);
+}
+@supports (color: color-mix(in lab, red, red)) {
+  * {
+    border-color: color-mix(in srgb, var(--greige) 45%, transparent);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 8rem;
+}
+
+body {
+  background: var(--marfil);
+  color: var(--grafito);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
+.rule-oro {
+  background: linear-gradient(90deg, transparent, var(--oro) 20%, var(--oro) 80%, transparent);
+  height: 1px;
+}
+
+.tracking-display {
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--oro);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------
+   Animaciones (CSS puro)
+   --------------------------------------------------------------- */
+
+/* Reveal al entrar en viewport: opacity 0 → 1, y 24px → 0, 0.5s.
+   JS solo añade .is-visible (IntersectionObserver, una vez, margen -80px).
+   Sin JS (.no-js) o con reduced-motion se muestra directamente. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.5s var(--ease-ox) var(--reveal-delay, 0s),
+    transform 0.5s var(--ease-ox) var(--reveal-delay, 0s);
+}
+.reveal.is-visible,
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* Carrusel: crossfade 0.7s */
+.slide {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-ox);
+  pointer-events: none;
+}
+.slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Dots del carrusel */
+.dot {
+  width: 0.5rem;
+  background-color: color-mix(in oklab, var(--marfil) 50%, transparent);
+}
+@media (hover: hover) {
+  .dot:hover {
+    background-color: color-mix(in oklab, var(--marfil) 80%, transparent);
+  }
+}
+.dot[aria-current="true"] {
+  width: 1.5rem;
+  background-color: var(--marfil);
+}
+
+/* Header: estado con scroll */
+.site-header[data-scrolled="true"] {
+  border-bottom-width: 1px;
+  background-color: color-mix(in oklab, var(--marfil) 85%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.site-header .nav-link {
+  color: color-mix(in oklab, var(--marfil) 90%, transparent);
+}
+.site-header .nav-link:hover {
+  color: var(--marfil);
+}
+.site-header[data-scrolled="true"] .nav-link {
+  color: color-mix(in oklab, var(--carbon) 80%, transparent);
+}
+.site-header[data-scrolled="true"] .nav-link:hover {
+  color: var(--verde);
+}
+.site-header .menu-toggle {
+  color: var(--marfil);
+}
+.site-header[data-scrolled="true"] .menu-toggle {
+  color: var(--carbon);
+}
+.site-header .icon-close,
+.site-header[data-menu-open="true"] .icon-open {
+  display: none;
+}
+.site-header[data-menu-open="true"] .icon-close {
+  display: block;
+}
+
+/* Diálogos (galería y plano) */
+dialog.ox-dialog {
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  background: color-mix(in oklab, var(--grafito) 90%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+dialog.ox-dialog::backdrop {
+  background: transparent;
+}
+
+/* Zoom tipo lupa del plano */
+.plan-zoom-img {
+  transform: scale(1);
+  transition: transform 0.2s ease-out;
+  cursor: zoom-in;
+}
+.plan-zoom-img.is-zoomed {
+  transform: scale(2.4);
+  transition: none;
+  cursor: zoom-out;
+}
+
+/* Segmentado Vivir / Invertir
+   (el original declara border-verde, pero la regla global de bordes lo anula:
+   el borde se queda greige 45 %; por eso aquí no se cambia border-color) */
+.intent-option:has(input:checked) {
+  background-color: color-mix(in oklab, var(--verde) 10%, transparent);
+  color: var(--verde);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  :before,
+  :after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

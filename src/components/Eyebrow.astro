@@ -1,0 +1,20 @@
+---
+interface Props {
+  /** "responsive" = text-sm sm:text-base · "xs" = text-xs fijo */
+  size?: "responsive" | "xs";
+  tone?: "oro" | "oro-300";
+  center?: boolean;
+}
+const { size = "responsive", tone = "oro", center = false } = Astro.props;
+---
+
+<p
+  class:list={[
+    "flex items-center gap-3 font-medium uppercase tracking-[0.3em]",
+    size === "xs" ? "text-xs" : "text-sm sm:text-base",
+    tone === "oro" ? "text-oro" : "text-oro-300",
+    center && "justify-center",
+  ]}
+>
+  <span class:list={["h-px w-8", tone === "oro" ? "bg-oro" : "bg-oro-300"]}></span><slot />
+</p>

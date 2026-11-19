@@ -1,0 +1,83 @@
+---
+import { getImage } from "astro:assets";
+import MapPin from "@lucide/astro/icons/map-pin";
+import BedDouble from "@lucide/astro/icons/bed-double";
+import WavesHorizontal from "@lucide/astro/icons/waves-horizontal";
+import Sun from "@lucide/astro/icons/sun";
+import Cpu from "@lucide/astro/icons/cpu";
+import ArrowDown from "@lucide/astro/icons/arrow-down";
+import fachada from "../assets/renders/fachada-principal.webp";
+import { waLink } from "../lib/whatsapp";
+
+const poster = await getImage({ src: fachada, width: 1920, format: "webp" });
+
+const chips = [
+  { icon: BedDouble, label: "3 Recámaras" },
+  { icon: WavesHorizontal, label: "Alberca" },
+  { icon: Sun, label: "Paneles Solares" },
+  { icon: Cpu, label: "Smart Home" },
+];
+---
+
+<section id="inicio" class="relative flex min-h-[100svh] items-end overflow-hidden">
+  <video
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    poster={poster.src}
+    class="absolute inset-0 h-full w-full object-cover object-center"
+  >
+    <source src="/media/video-ox-cortado.mp4" type="video/mp4" />
+  </video>
+  <div class="absolute inset-0 bg-gradient-to-t from-grafito/75 via-grafito/25 to-transparent"></div>
+
+  <div class="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 pt-32 sm:px-8 sm:pb-20">
+    <div class="max-w-2xl lg:max-w-4xl xl:max-w-5xl">
+      <p class="mb-4 flex items-center gap-2 text-lg font-medium text-marfil/95 sm:text-xl">
+        <MapPin size={24} class="text-oro-300" aria-hidden="true" />Zona Norte de Mérida, Yucatán
+      </p>
+      <h1
+        class="font-display text-4xl font-semibold leading-[1.05] tracking-display text-marfil sm:text-6xl lg:text-6xl xl:text-7xl"
+      >
+        Vive en una Smart Home<br />diseñada para el futuro.
+      </h1>
+      <p class="mt-5 max-w-xl text-base leading-relaxed text-marfil/90 sm:text-lg">
+        Tecnología, seguridad y eficiencia energética en residencias contemporáneas ubicadas en la Zona Norte de Mérida.
+      </p>
+
+      <div class="mt-7 flex flex-wrap items-center gap-x-3 gap-y-3">
+        <span class="rounded-full bg-oro px-5 py-2 text-sm font-semibold text-grafito shadow-sm">Desde $4.4 MDP*</span>
+        <div class="flex flex-wrap gap-2">
+          {
+            chips.map(({ icon: Icon, label }) => (
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-marfil/30 bg-grafito/30 px-3.5 py-2 text-xs font-medium text-marfil backdrop-blur-sm">
+                <Icon size={15} class="text-oro-300" aria-hidden="true" />
+                {label}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a
+          href={waLink()}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[52px] items-center justify-center rounded-full bg-verde px-8 text-sm font-medium tracking-wide text-marfil shadow-lg shadow-black/20 transition-all duration-200 hover:bg-verde-700 hover:shadow-xl"
+          >Agenda una Visita y Conoce OX</a
+        >
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="#smart-living"
+    aria-label="Desplázate para ver más"
+    class="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-marfil/70 transition-colors hover:text-marfil"
+  >
+    <ArrowDown size={22} class="animate-bounce" aria-hidden="true" />
+  </a>
+</section>

@@ -1,0 +1,11 @@
+dist/
+.astro/
+.vercel/
+node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Configuración local de herramientas
+.claude/
