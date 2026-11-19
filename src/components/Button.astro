@@ -1,18 +1,23 @@
 ---
+import ArrowRight from "@lucide/astro/icons/arrow-right";
+
 interface Props {
   href: string;
   variant?: "primary" | "light";
+  /** Flecha que avanza al pasar el cursor (MEJORA v2) */
+  arrow?: boolean;
   class?: string;
 }
-const { href, variant = "primary", class: className = "" } = Astro.props;
+const { href, variant = "primary", arrow = true, class: className = "" } = Astro.props;
+const external = href.startsWith("http");
 ---
 
 <a
   href={href}
-  target="_blank"
-  rel="noopener noreferrer"
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
   class:list={[
-    "inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-7 text-sm font-medium tracking-wide transition-all duration-200",
+    "group inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-7 text-sm font-medium tracking-wide transition-all duration-200",
     variant === "primary"
       ? "bg-verde text-marfil hover:bg-verde-700 shadow-sm hover:shadow-md"
       : "bg-marfil text-grafito hover:bg-oro-300",
@@ -20,4 +25,5 @@ const { href, variant = "primary", class: className = "" } = Astro.props;
   ]}
 >
   <slot />
+  {arrow && <ArrowRight size={17} class="cta-arrow shrink-0" aria-hidden="true" />}
 </a>

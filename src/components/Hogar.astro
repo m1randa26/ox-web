@@ -44,8 +44,10 @@ const amenities = ["Cocina integral", "Jardín", "Paneles solares", "Diseño con
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
           {
             specs.map(({ icon: Icon, value, label }) => (
-              <div class="rounded-2xl border border-greige/40 bg-white/40 p-5">
-                <Icon size={22} stroke-width={1.6} class="text-oro" aria-hidden="true" />
+              <div class="lift group rounded-2xl border border-greige/40 bg-white/50 p-5 hover:border-oro/50 hover:bg-white hover:shadow-lg hover:shadow-grafito/5">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-oro/10 text-oro transition-colors duration-300 group-hover:bg-oro group-hover:text-marfil">
+                  <Icon size={22} stroke-width={1.6} aria-hidden="true" />
+                </span>
                 <p class="mt-3 font-display text-lg font-semibold leading-tight text-grafito">{value}</p>
                 <p class="mt-0.5 text-xs leading-snug text-carbon/65">{label}</p>
               </div>
@@ -58,8 +60,10 @@ const amenities = ["Cocina integral", "Jardín", "Paneles solares", "Diseño con
         <ul class="grid grid-cols-1 gap-3">
           {
             amenities.map((a) => (
-              <li class="flex items-center gap-2.5 text-sm text-carbon/85">
-                <Check size={17} class="shrink-0 text-verde" aria-hidden="true" />
+              <li class="flex items-center gap-3 border-b border-greige/30 pb-3 text-sm text-carbon/85 last:border-0">
+                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-verde/10">
+                  <Check size={14} stroke-width={2.5} class="text-verde" aria-hidden="true" />
+                </span>
                 {a}
               </li>
             ))

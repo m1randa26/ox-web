@@ -23,14 +23,18 @@ const values = [
   <div class="mx-auto max-w-7xl px-5 sm:px-8">
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
       <Reveal>
-        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl">
-          <Image
-            src={lateral1}
-            alt="Detalle arquitectónico de un desarrollo OSTECH"
-            widths={[384, 640, 828, 1080, 1200, 1920, 2000]}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            class="absolute inset-0 h-full w-full object-cover"
-          />
+        <!-- MEJORA v2: marco dorado desplazado detrás de la imagen -->
+        <div class="relative pb-4 pr-4 sm:pb-6 sm:pr-6">
+          <div class="absolute bottom-0 right-0 top-6 left-6 rounded-2xl border border-oro/70 sm:top-8 sm:left-8"></div>
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-black/30">
+            <Image
+              src={lateral1}
+              alt="Detalle arquitectónico de un desarrollo OSTECH"
+              widths={[384, 640, 828, 1080, 1200, 1920, 2000]}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              class="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
         </div>
       </Reveal>
 

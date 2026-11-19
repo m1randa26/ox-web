@@ -41,20 +41,25 @@ const delays = [0, 0.08, 0.16];
     <div class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
         cards.map((c, i) => (
-          <Reveal delay={delays[i % 3]}>
-            <article class="group overflow-hidden rounded-2xl border border-marfil/10 bg-grafito/40">
+          <Reveal delay={delays[i % 3]} class="h-full">
+            <article class="lift group h-full overflow-hidden rounded-2xl border border-marfil/10 bg-grafito/40 hover:border-oro/40 hover:shadow-2xl hover:shadow-black/40">
               <div class="relative aspect-[4/3] overflow-hidden">
                 <Image
                   src={c.img}
                   alt={c.title}
                   widths={[384, 640, 828, 1080, 1500].filter((w) => w < c.img.width).concat(c.img.width)}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                 />
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-grafito/60 to-transparent"></div>
+                <span class="absolute left-4 top-4 rounded-full border border-marfil/20 bg-grafito/50 px-2.5 py-1 font-display text-xs font-medium tracking-[0.15em] text-oro-300 backdrop-blur-md">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
               <div class="p-6">
                 <h3 class="font-display text-xl font-medium text-marfil">{c.title}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-marfil/70">{c.text}</p>
+                <span class="mt-5 block h-px w-10 bg-oro/60 transition-all duration-500 group-hover:w-20 group-hover:bg-oro"></span>
               </div>
             </article>
           </Reveal>
@@ -66,7 +71,7 @@ const delays = [0, 0.08, 0.16];
       <div
         class="mt-16 flex flex-col items-start gap-6 border-t border-marfil/15 pt-10 lg:flex-row lg:items-end lg:justify-between"
       >
-        <p class="max-w-xl font-display text-2xl font-light leading-snug text-marfil/95">
+        <p class="max-w-2xl border-l-2 border-oro pl-6 font-display text-2xl font-light leading-snug text-marfil/95 sm:text-[1.65rem]">
           La mejor tecnología es aquella que mejora tu vida sin que tengas que pensar en ella. En OX, cada residencia
           integra soluciones inteligentes que aportan comodidad, seguridad y bienestar para que tú solo te dediques a
           disfrutar tu hogar.

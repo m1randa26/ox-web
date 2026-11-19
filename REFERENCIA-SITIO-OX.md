@@ -515,3 +515,30 @@ Comparado contra el original a 1440 px y 375 px: posiciones y alturas de todas l
 - [ ] Botón WhatsApp flotante con safe‑area y texto oculto en móvil.
 - [ ] Reveal con ease `[0.22,1,0.36,1]`, 0.5 s, y 24 px, `once`, margen −80 px; respeta reduced‑motion.
 - [ ] Textos copiados literalmente (acentos incluidos) de este documento.
+
+---
+
+## 13. Mejoras de diseño v2 (sobre la réplica)
+
+A partir de aquí el sitio **deja de ser idéntico** al original a propósito. El contenido (textos, imágenes, datos, enlaces) no cambia; solo se agregan un botón secundario en el hero ("Conoce la residencia" → `#hogar`), numeración decorativa en las tarjetas y el contador de la galería.
+
+| Área | Problema en el original | Mejora |
+|---|---|---|
+| **Header** | ~153 px de alto (logo de 112–128 px); links marfil y logo verde sin contraste sobre la fachada clara del video | Píldora flotante de vidrio marfil (`.nav-shell`, `max-w-6xl`, `rounded-3xl`, blur 14px). Logo de 48/56 px que baja a 44 px con scroll. Alto total ~58 px. `scroll-padding-top` de 8rem a 6rem |
+| **Navegación** | Sin indicador de sección | Subrayado dorado animado al pasar el cursor y en la sección activa (`aria-current`, IntersectionObserver) |
+| **Menú móvil** | Aparece de golpe | Despliegue suave (`grid-template-rows 0fr → 1fr`), links en Outfit 18px con flecha dorada, cierra con Esc, links fuera del orden de tabulación cuando está cerrado |
+| **Hero: legibilidad** | Degradado solo de abajo hacia arriba; el texto queda sobre la parte más brillante del video | Doble degradado (`.hero-scrim`): oscurece izquierda y abajo, deja ver la arquitectura a la derecha; en móvil, degradado vertical más denso. Sombra de texto suave |
+| **Hero: jerarquía** | Todo el H1 en marfil | Segunda línea del H1 en `oro-300`; ubicación dentro de una píldora de vidrio |
+| **Hero: movimiento** | Contenido estático | Entrada escalonada (`.hero-in`: opacidad, 28px y desenfoque, retrasos 0.15–1.1 s), zoom lento del video al cargar (`ken-burns` 2.4 s) e indicador de scroll tipo "mouse" |
+| **CTA** | Botones planos | Flecha que avanza al pasar el cursor (`.cta-arrow`) en todos los botones; CTA secundario con borde en el hero |
+| **Smart Living** | Tarjetas estáticas | Elevación al pasar el cursor (`.lift`), borde dorado, numeración 01–06, degradado sobre la foto, línea dorada que crece. Cita con filete dorado a la izquierda |
+| **Galería** | Solo puntos | Contador "04 / 09" y pie de foto sobre un degradado; puntos a la derecha en escritorio |
+| **Fichas y lista** | Íconos sueltos | Ícono en caja dorada que se rellena al pasar el cursor; checks en círculo verde con separadores |
+| **Ubicación** | Mapa a todo color que rompe la paleta | Mapa desaturado con tono cálido (`.map-tint`) que recupera el color al pasar el cursor; íconos que se rellenan de verde |
+| **OSTECH** | Imagen plana | Marco dorado desplazado detrás de la imagen y sombra profunda |
+| **Formulario** | La regla global de bordes anulaba `focus:border-verde` y `border-red-500`: **no había indicador de foco ni de error** | La regla de bordes pasa a `@layer base` (solo valor por defecto). Foco con borde verde y halo `ring-4 ring-verde/10`; error en rojo; foco visible en Vivir/Invertir |
+| **WhatsApp** | — | Pulso discreto 3 veces al cargar, luego se detiene |
+
+**Accesibilidad:** todas las animaciones nuevas se desactivan con `prefers-reduced-motion`.
+
+**Consecuencia del cambio de bordes:** ahora sí se ven los colores de borde que el markup original pedía (`border-marfil/10` en tarjetas oscuras, `border-marfil/30` en los chips del hero, `border-oro/30` en OSTECH, etc.). Ya no aplica el punto de la checklist sobre replicar la regla global fuera de capa.

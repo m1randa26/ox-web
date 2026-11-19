@@ -35,8 +35,8 @@ const mapSrc =
           <ul class="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {
               points.map(({ icon: Icon, label }) => (
-                <li class="flex items-center gap-3">
-                  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-verde/10 text-verde">
+                <li class="group flex items-center gap-3">
+                  <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-verde/10 text-verde transition-colors duration-300 group-hover:bg-verde group-hover:text-marfil">
                     <Icon size={20} stroke-width={1.6} aria-hidden="true" />
                   </span>
                   <span class="text-sm font-medium text-carbon/85">{label}</span>
@@ -52,13 +52,13 @@ const mapSrc =
       </div>
 
       <Reveal delay={0.1}>
-        <div class="overflow-hidden rounded-2xl border border-greige/40 shadow-sm">
+        <div class="map-frame relative overflow-hidden rounded-2xl border border-greige/40 shadow-xl shadow-grafito/10">
           <iframe
             title="Ubicación de OX Tres Residencias Privadas, Dzityá, Mérida"
             src={mapSrc}
             loading="lazy"
             referrerpolicy="strict-origin-when-cross-origin"
-            class="h-[420px] w-full lg:h-[520px]"
+            class="map-tint block h-[420px] w-full lg:h-[520px]"
             allowfullscreen></iframe>
         </div>
       </Reveal>

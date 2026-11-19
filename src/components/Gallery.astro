@@ -84,7 +84,16 @@ const widthsFor = (w: number) => [640, 828, 1080, 1200, 1920].filter((x) => x < 
     <ChevronRight size={22} aria-hidden="true" />
   </button>
 
-  <div class="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+  <!-- MEJORA v2: pie de foto con contador sobre un degradado inferior -->
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-32 bg-gradient-to-t from-grafito/70 to-transparent"></div>
+  <div class="pointer-events-none absolute bottom-10 left-5 z-10 hidden items-baseline gap-3 text-marfil sm:flex sm:bottom-5 sm:left-6">
+    <span class="font-display text-sm font-medium tracking-[0.15em] text-oro-300"
+      ><span data-count>01</span><span class="text-marfil/50"> / {String(slides.length).padStart(2, "0")}</span></span
+    >
+    <span data-slide-caption class="text-sm font-medium text-marfil/90">{slides[0].alt}</span>
+  </div>
+
+  <div class="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 sm:left-auto sm:right-6 sm:translate-x-0 sm:bottom-6">
     {
       slides.map((_, i) => (
         <button
@@ -157,7 +166,11 @@ const widthsFor = (w: number) => [640, 828, 1080, 1200, 1920].filter((x) => x < 
       s.querySelector("button")!.tabIndex = active ? 0 : -1;
     });
     dots.forEach((d, k) => d.setAttribute("aria-current", String(k === current)));
+    count.textContent = String(current + 1).padStart(2, "0");
+    slideCaption.textContent = slides[current].querySelector("img")?.alt ?? "";
   };
+  const count = root.querySelector<HTMLElement>("[data-count]")!;
+  const slideCaption = root.querySelector<HTMLElement>("[data-slide-caption]")!;
 
   const start = () => {
     stop();
