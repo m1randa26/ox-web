@@ -77,11 +77,13 @@ const input =
             <Send size={18} aria-hidden="true" /><span data-label>Agenda una visita y conoce OX</span>
           </button>
 
-          <p data-status="sent" role="status" class="text-center text-sm font-medium text-verde" hidden>
-            ¡Gracias! Recibimos tus datos y te contactaremos muy pronto.
-          </p>
-          <p data-status="error" role="alert" class="text-center text-sm text-red-600" hidden></p>
-          <p class="text-center text-xs text-carbon/55">Al enviar, tus datos llegarán a nuestro equipo de ventas.</p>
+          <div data-status="sent" role="status" class="rounded-xl border border-verde/20 bg-verde/5 px-4 py-3 text-center text-sm text-verde" hidden>
+            <p class="font-medium">¡Listo! Abrimos WhatsApp con tu mensaje; solo presiona enviar.</p>
+            <p class="mt-1 text-xs text-carbon/70">
+              ¿No se abrió? <a data-wa-fallback href="#" target="_blank" rel="noopener noreferrer" class="font-medium text-verde underline underline-offset-2">Abrir WhatsApp</a>
+            </p>
+          </div>
+          <p class="text-center text-xs text-carbon/55">Al enviar, se abrirá WhatsApp con tus datos listos para nuestro equipo de ventas.</p>
         </form>
       </div>
     </div>
@@ -89,6 +91,8 @@ const input =
 </section>
 
 <script>
+  import { leadLink } from "../lib/whatsapp";
+
   const form = document.querySelector<HTMLFormElement>("#contact-form")!;
   const $ = <T extends HTMLElement>(sel: string) => form.querySelector<T>(sel)!;
   const fields = {
@@ -98,11 +102,8 @@ const input =
     city: $<HTMLInputElement>("#city"),
     website: $<HTMLInputElement>("#website"),
   };
-  const submit = $<HTMLButtonElement>("button[type=submit]");
-  const label = $<HTMLElement>("[data-label]");
   const sent = $<HTMLElement>('[data-status="sent"]');
-  const failed = $<HTMLElement>('[data-status="error"]');
-  const DEFAULT_ERROR = "No pudimos enviar tu solicitud.";
+  const fallback = $<HTMLAnchorElement>("[data-wa-fallback]");
 
   type Errors = Partial<Record<"name" | "phone" | "email", string>>;
 
@@ -133,43 +134,46 @@ const input =
 
   [fields.name, fields.phone, fields.email].forEach((i) => i.addEventListener("blur", () => showErrors(validate())));
 
-  form.addEventListener("submit", async (ev) => {
+  form.addEventListener("submit", (ev) => {
     ev.preventDefault();
+    sent.hidden = true;
     const e = validate();
     showErrors(e);
-    if (Object.keys(e).length) return;
+    if (Object.keys(e).length) {
+      fields[(Object.keys(e)[0] as keyof Errors)].focus();
+      return;
+    }
+    // Honeypot: un bot llenó el campo oculto → no se abre nada.
+    if (fields.website.value) return;
 
-    submit.disabled = true;
-    label.textContent = "Enviando…";
-    sent.hidden = true;
-    failed.hidden = true;
+    const lead = {
+      name: fields.name.value.trim(),
+      phone: fields.phone.value.trim(),
+      email: fields.email.value.trim(),
+      city: fields.city.value.trim(),
+      intent: form.querySelector<HTMLInputElement>('input[name="intent"]:checked')?.value ?? "",
+    };
+    const url = leadLink(lead);
 
-    const intent = form.querySelector<HTMLInputElement>('input[name="intent"]:checked')?.value ?? "";
+    // Se abre de inmediato (dentro del gesto del usuario) para que el navegador no lo bloquee.
+    const win = window.open(url, "_blank");
+    if (win) win.opener = null;
+    else window.location.href = url; // ventana emergente bloqueada → misma pestaña
+
+    // Respaldo opcional del lead en el servidor (no bloquea ni muestra errores).
     try {
-      const res = await fetch("/api/contacto", {
+      fetch("/api/contacto", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: fields.name.value.trim(),
-          phone: fields.phone.value.trim(),
-          email: fields.email.value.trim(),
-          city: fields.city.value.trim(),
-          intent,
-          website: fields.website.value,
-        }),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error ?? DEFAULT_ERROR);
-      }
-      form.reset();
-      sent.hidden = false;
-    } catch (err) {
-      failed.textContent = err instanceof Error ? err.message : DEFAULT_ERROR;
-      failed.hidden = false;
-    } finally {
-      submit.disabled = false;
-      label.textContent = "Agenda una visita y conoce OX";
+        body: JSON.stringify({ ...lead, website: "" }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch {
+      /* sin respaldo */
     }
+
+    fallback.href = url;
+    sent.hidden = false;
+    form.reset();
   });
 </script>

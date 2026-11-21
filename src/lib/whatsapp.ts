@@ -15,6 +15,35 @@ interface WaOptions {
   context?: string;
 }
 
+export interface LeadData {
+  name: string;
+  phone: string;
+  email?: string;
+  city?: string;
+  intent?: string;
+}
+
+/**
+ * Mensaje del formulario "Agenda tu visita".
+ * Usa *negritas* de WhatsApp y omite los campos opcionales vacíos.
+ */
+export function leadMessage({ name, phone, email, city, intent }: LeadData): string {
+  const lines = [
+    "Hola, me gustaría agendar una visita a OX Residencial. Estos son mis datos:",
+    "",
+    `*Nombre:* ${name.trim()}`,
+    `*Teléfono:* ${phone.trim()}`,
+  ];
+  if (email?.trim()) lines.push(`*Correo:* ${email.trim()}`);
+  if (city?.trim()) lines.push(`*Ciudad de origen:* ${city.trim()}`);
+  if (intent?.trim()) lines.push(`*Busco para:* ${intent.trim()}`);
+  return lines.join("\n");
+}
+
+export function leadLink(data: LeadData): string {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(leadMessage(data))}`;
+}
+
 /** Mismo generador que el sitio original. */
 export function waLink({ name, phone, city, intent, context }: WaOptions = {}): string {
   let message = context?.trim() || DEFAULT_MESSAGE;

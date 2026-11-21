@@ -542,3 +542,21 @@ A partir de aquí el sitio **deja de ser idéntico** al original a propósito. E
 **Accesibilidad:** todas las animaciones nuevas se desactivan con `prefers-reduced-motion`.
 
 **Consecuencia del cambio de bordes:** ahora sí se ven los colores de borde que el markup original pedía (`border-marfil/10` en tarjetas oscuras, `border-marfil/30` en los chips del hero, `border-oro/30` en OSTECH, etc.). Ya no aplica el punto de la checklist sobre replicar la regla global fuera de capa.
+
+### Formulario → WhatsApp (v2.1)
+Al enviar, el formulario valida igual que antes y **abre WhatsApp** (`wa.me/5219996500077`) con un mensaje armado con los datos (`leadMessage()` en `src/lib/whatsapp.ts`):
+
+```
+Hola, me gustaría agendar una visita a OX Residencial. Estos son mis datos:
+
+*Nombre:* Ana Pérez
+*Teléfono:* 999 123 4567
+*Correo:* ana@correo.com          ← solo si se llenó
+*Ciudad de origen:* Mérida        ← solo si se llenó
+*Busco para:* Invertir            ← solo si se eligió
+```
+- Se abre en una pestaña nueva dentro del mismo clic (para evitar el bloqueo de ventanas emergentes); si el navegador la bloquea, abre en la misma pestaña.
+- Después se muestra "¡Listo! Abrimos WhatsApp con tu mensaje; solo presiona enviar." con un enlace de respaldo "Abrir WhatsApp", y el formulario se limpia.
+- Si hay errores, se enfoca el primer campo con error. Si el honeypot está lleno, no se abre nada.
+- Además se manda el lead en segundo plano a `/api/contacto` como respaldo (no bloquea ni muestra errores).
+- Nota legal actualizada: "Al enviar, se abrirá WhatsApp con tus datos listos para nuestro equipo de ventas."
